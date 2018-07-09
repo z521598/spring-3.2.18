@@ -2,25 +2,15 @@ package com.lsq.beans.factory.support;
 
 import com.lsq.beans.BeanDefinition;
 import com.lsq.beans.factory.BeanCreationException;
-import com.lsq.beans.factory.BeanDefinitionStoreException;
 import com.lsq.beans.factory.BeanFactory;
 import com.lsq.util.ClassUtils;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.bean.BeanDocumentFactory;
-import org.dom4j.io.SAXReader;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Administrator on 2018/7/8.
  */
+// 权责分离，BeanFactory和BeanDefinitionRegistry是2个权责
 public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry {
 
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>();
