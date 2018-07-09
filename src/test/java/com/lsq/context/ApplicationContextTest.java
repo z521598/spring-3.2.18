@@ -26,5 +26,4 @@ public class ApplicationContextTest {
         Assert.assertNotNull(petStoreService);
     }
 
-
 }

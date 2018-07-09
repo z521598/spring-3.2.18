@@ -4,6 +4,8 @@ import com.lsq.beans.factory.BeanCreationException;
 import com.lsq.beans.factory.BeanDefinitionStoreException;
 import com.lsq.beans.factory.support.DefaultBeanFactory;
 import com.lsq.beans.factory.xml.XmlBeanDefinitionReader;
+import com.lsq.context.ApplicationContext;
+import com.lsq.context.support.ClassPathXmlApplicationContext;
 import com.lsq.core.io.ClassPathResource;
 import com.lsq.service.PetStoreService;
 import org.junit.Assert;
@@ -27,7 +29,7 @@ public class BeanFactoryTest {
     public void testGetBean() {
         xmlBeanDefinitionReader.loadBeanDefinition(new ClassPathResource("beans.xml"));
         BeanDefinition db = beanFactory.getBeanDefinition("petStore");
-        String className = db.getClassName();
+        String className = db.getBeanClassName();
         Assert.assertEquals("com.lsq.service.PetStoreService", className);
         PetStoreService petStoreService = (PetStoreService) beanFactory.getBean("petStore");
         Assert.assertNotNull(petStoreService);
@@ -43,6 +45,24 @@ public class BeanFactoryTest {
     @Test(expected = BeanDefinitionStoreException.class)
     public void testGetInvalidXML() throws Exception {
         xmlBeanDefinitionReader.loadBeanDefinition(new ClassPathResource("invalid.xml"));
+    }
+
+    @Test
+    public void testSingletonBean() throws Exception {
+        xmlBeanDefinitionReader.loadBeanDefinition(new ClassPathResource("beans.xml"));
+
+        PetStoreService petStoreService = (PetStoreService) beanFactory.getBean("petStore");
+        PetStoreService petStoreService2 = (PetStoreService) beanFactory.getBean("petStore");
+        Assert.assertEquals(petStoreService, petStoreService2);
+    }
+
+    @Test
+    public void testPrototypeBean() throws Exception {
+        xmlBeanDefinitionReader.loadBeanDefinition(new ClassPathResource("beans.xml"));
+
+        PetStoreService petStoreService = (PetStoreService) beanFactory.getBean("petStore2");
+        PetStoreService petStoreService2 = (PetStoreService) beanFactory.getBean("petStore2");
+        Assert.assertNotEquals(petStoreService, petStoreService2);
     }
 
 }

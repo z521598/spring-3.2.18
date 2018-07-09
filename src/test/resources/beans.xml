@@ -21,6 +21,8 @@
     http://www.springframework.org/schema/util/spring-util.xsd">
 
     <bean id="petStore" class="com.lsq.service.PetStoreService"/>
+    <bean id="petStore2" class="com.lsq.service.PetStoreService" scope="prototype"/>
+
 
     <bean id="invalid" class="xxx.xxx"/>
 </beans>  

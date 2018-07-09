@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by Administrator on 2018/7/8.
  */
 // 权责分离，BeanFactory和BeanDefinitionRegistry是2个权责
-public class DefaultBeanFactory
+public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
         implements BeanDefinitionRegistry, ConfigurableBeanFactory {
 
     private ClassLoader classLoader;
@@ -29,12 +29,28 @@ public class DefaultBeanFactory
     }
 
     @Override
-    public Object getBean(String id) {
-        BeanDefinition beanDefinition = beanDefinitionMap.get(id);
+    public Object getBean(String beanId) {
+
+        BeanDefinition beanDefinition = beanDefinitionMap.get(beanId);
         if (beanDefinition == null) {
             throw new BeanCreationException("Bean Definition does not exist");
         }
-        String className = beanDefinition.getClassName();
+        if (beanDefinition.isSingleton()) {
+            // FIXME 线程不安全
+            Object bean = getSingletonBean(beanId);
+            if (bean == null) {
+                bean = createBean(beanDefinition);
+                registerSingletonBean(beanId, bean);
+            }
+            return bean;
+        }
+        return createBean(beanDefinition);
+
+
+    }
+
+    private Object createBean(BeanDefinition beanDefinition) {
+        String className = beanDefinition.getBeanClassName();
         try {
             Class cla = getBeanClassLoader().loadClass(className);
             return cla.newInstance();
