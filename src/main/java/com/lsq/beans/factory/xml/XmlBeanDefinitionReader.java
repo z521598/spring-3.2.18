@@ -1,8 +1,10 @@
-package com.lsq.beans.factory.support;
+package com.lsq.beans.factory.xml;
 
 import com.lsq.beans.BeanDefinition;
 import com.lsq.beans.factory.BeanDefinitionStoreException;
 import com.lsq.beans.factory.BeanFactory;
+import com.lsq.beans.factory.support.BeanDefinitionRegistry;
+import com.lsq.beans.factory.support.GenericBeanDefinition;
 import com.lsq.core.io.Resource;
 import com.lsq.util.ClassUtils;
 import org.dom4j.Document;

@@ -1,7 +1,7 @@
 package com.lsq.context.support;
 
 import com.lsq.core.io.Resource;
-import com.lsq.core.io.support.FileSystemResource;
+import com.lsq.core.io.FileSystemResource;
 
 /**
  * Created by Administrator on 2018/7/9.

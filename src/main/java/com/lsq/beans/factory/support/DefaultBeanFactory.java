@@ -2,8 +2,7 @@ package com.lsq.beans.factory.support;
 
 import com.lsq.beans.BeanDefinition;
 import com.lsq.beans.factory.BeanCreationException;
-import com.lsq.beans.factory.BeanFactory;
-import com.lsq.config.ConfigurableBeanFactory;
+import com.lsq.beans.factory.config.ConfigurableBeanFactory;
 import com.lsq.util.ClassUtils;
 
 import java.util.Map;

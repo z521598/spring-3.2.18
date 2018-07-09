@@ -2,10 +2,9 @@ package com.lsq.beans;
 
 import com.lsq.beans.factory.BeanCreationException;
 import com.lsq.beans.factory.BeanDefinitionStoreException;
-import com.lsq.beans.factory.BeanFactory;
 import com.lsq.beans.factory.support.DefaultBeanFactory;
-import com.lsq.beans.factory.support.XmlBeanDefinitionReader;
-import com.lsq.core.io.support.ClassPathResource;
+import com.lsq.beans.factory.xml.XmlBeanDefinitionReader;
+import com.lsq.core.io.ClassPathResource;
 import com.lsq.service.PetStoreService;
 import org.junit.Assert;
 import org.junit.Before;

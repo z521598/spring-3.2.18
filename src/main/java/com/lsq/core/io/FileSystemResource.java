@@ -1,4 +1,4 @@
-package com.lsq.core.io.support;
+package com.lsq.core.io;
 
 import com.lsq.core.io.Resource;
 import com.lsq.util.ClassUtils;

@@ -1,4 +1,4 @@
-package com.lsq.config;
+package com.lsq.beans.factory.config;
 
 import com.lsq.beans.factory.BeanFactory;
 
