@@ -5,6 +5,7 @@ import com.lsq.beans.factory.BeanDefinitionStoreException;
 import com.lsq.beans.factory.BeanFactory;
 import com.lsq.beans.factory.support.DefaultBeanFactory;
 import com.lsq.beans.factory.support.XmlBeanDefinitionReader;
+import com.lsq.core.io.support.ClassPathResource;
 import com.lsq.service.PetStoreService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,7 +26,7 @@ public class BeanFactoryTest {
 
     @Test
     public void testGetBean() {
-        xmlBeanDefinitionReader.loadBeanDefinition("beans.xml");
+        xmlBeanDefinitionReader.loadBeanDefinition(new ClassPathResource("beans.xml"));
         BeanDefinition db = beanFactory.getBeanDefinition("petStore");
         String className = db.getClassName();
         Assert.assertEquals("com.lsq.service.PetStoreService", className);
@@ -35,14 +36,14 @@ public class BeanFactoryTest {
 
     @Test(expected = BeanCreationException.class)
     public void testGetInvalidBean() throws Exception {
-        xmlBeanDefinitionReader.loadBeanDefinition("beans.xml");
+        xmlBeanDefinitionReader.loadBeanDefinition(new ClassPathResource("beans.xml"));
         beanFactory.getBean("invalid");
         beanFactory.getBean("null");
     }
 
     @Test(expected = BeanDefinitionStoreException.class)
     public void testGetInvalidXML() throws Exception {
-        xmlBeanDefinitionReader.loadBeanDefinition("invalid.xml");
+        xmlBeanDefinitionReader.loadBeanDefinition(new ClassPathResource("invalid.xml"));
     }
 
 }

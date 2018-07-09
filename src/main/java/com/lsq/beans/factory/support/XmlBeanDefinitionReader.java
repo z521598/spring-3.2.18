@@ -3,12 +3,14 @@ package com.lsq.beans.factory.support;
 import com.lsq.beans.BeanDefinition;
 import com.lsq.beans.factory.BeanDefinitionStoreException;
 import com.lsq.beans.factory.BeanFactory;
+import com.lsq.core.io.Resource;
 import com.lsq.util.ClassUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
@@ -27,10 +29,11 @@ public class XmlBeanDefinitionReader {
         this.beanDefinitionRegistry = beanDefinitionRegistry;
     }
 
-    public void loadBeanDefinition(String xmlPath) {
-        InputStream xmlFileInputStream = ClassUtils.getDefaultClassLoader().getResourceAsStream(xmlPath);
+    public void loadBeanDefinition(Resource resource) {
+        InputStream xmlFileInputStream = null;
         SAXReader saxReader = new SAXReader();
         try {
+            xmlFileInputStream = resource.getInputStream();
             Document document = saxReader.read(xmlFileInputStream);
             // <beans>
             Element root = document.getRootElement();
@@ -40,10 +43,10 @@ public class XmlBeanDefinitionReader {
                 String id = element.attributeValue(ID_ATTRIBUTE);
                 String className = element.attributeValue(CLASS_ATTRIBUTE);
                 BeanDefinition beanDefinition = new GenericBeanDefinition(id, className);
-                beanDefinitionRegistry.registerBeanDefinition(id,beanDefinition);
+                beanDefinitionRegistry.registerBeanDefinition(id, beanDefinition);
             }
-        } catch (DocumentException e) {
-            throw new BeanDefinitionStoreException("IOException parsing XML document from " + xmlPath, e);
+        } catch (Exception e) {
+            throw new BeanDefinitionStoreException("IOException parsing XML document from " + resource.getDescription(), e);
         } finally {
             // 关闭流
             if (xmlFileInputStream != null) {

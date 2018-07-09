@@ -4,22 +4,21 @@ import com.lsq.beans.factory.BeanFactory;
 import com.lsq.beans.factory.support.DefaultBeanFactory;
 import com.lsq.beans.factory.support.XmlBeanDefinitionReader;
 import com.lsq.context.ApplicationContext;
+import com.lsq.core.io.Resource;
+import com.lsq.core.io.support.ClassPathResource;
 
 /**
  * Created by Administrator on 2018/7/9.
  */
-public class ClassPathXmlApplicationContext implements ApplicationContext {
+public class ClassPathXmlApplicationContext extends AbstractApplicationContext {
 
-    private DefaultBeanFactory beanFactory;
 
     public ClassPathXmlApplicationContext(String xmlPath) {
-        beanFactory = new DefaultBeanFactory();
-        XmlBeanDefinitionReader xmlBeanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
-        xmlBeanDefinitionReader.loadBeanDefinition(xmlPath);
+        super(xmlPath);
     }
 
     @Override
-    public Object getBean(String beanId) {
-        return beanFactory.getBean(beanId);
+    public Resource getInputStreamByPath(String xmlPath) {
+        return new ClassPathResource(xmlPath, this.getBeanClassLoader());
     }
 }
