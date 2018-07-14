@@ -1,10 +1,16 @@
 package com.lsq.beans.factory.support;
 
 import com.lsq.beans.BeanDefinition;
+import com.lsq.beans.PropertyValue;
 import com.lsq.beans.factory.BeanCreationException;
 import com.lsq.beans.factory.config.ConfigurableBeanFactory;
+import com.lsq.beans.factory.config.RuntimeReference;
 import com.lsq.util.ClassUtils;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,7 +36,6 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 
     @Override
     public Object getBean(String beanId) {
-
         BeanDefinition beanDefinition = beanDefinitionMap.get(beanId);
         if (beanDefinition == null) {
             throw new BeanCreationException("Bean Definition does not exist");
@@ -42,6 +47,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
                 bean = createBean(beanDefinition);
                 registerSingletonBean(beanId, bean);
             }
+
             return bean;
         }
         return createBean(beanDefinition);
@@ -50,6 +56,40 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
     }
 
     private Object createBean(BeanDefinition beanDefinition) {
+        Object bean = instanceBean(beanDefinition);
+        populateBean(bean, beanDefinition);
+        return bean;
+    }
+
+    private void populateBean(Object bean, BeanDefinition beanDefinition) {
+        List<PropertyValue> propertyValues = beanDefinition.getPropertyValues();
+        if (propertyValues == null || propertyValues.isEmpty()) {
+            return;
+        }
+        try {
+            BeanDefinitionValueResolver valueResolver = new BeanDefinitionValueResolver(this);
+            BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
+            PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
+            for (PropertyValue propertyValue : propertyValues) {
+
+                String propertyName = propertyValue.getName();
+                Object originalValue = propertyValue.getValue();
+                Object resolveValue = valueResolver.resolveValueIfNecessary(originalValue);
+
+                for (PropertyDescriptor pd : pds) {
+                    if (pd.getName().equals(propertyName)) {
+                        pd.getWriteMethod().invoke(bean, resolveValue);
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            throw new BeanCreationException("Failed to obtain BeanInfo for class [" + beanDefinition.getBeanClassName() + "]", e);
+        }
+
+    }
+
+    private Object instanceBean(BeanDefinition beanDefinition) {
         String className = beanDefinition.getBeanClassName();
         try {
             Class cla = getBeanClassLoader().loadClass(className);
@@ -57,8 +97,8 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
         } catch (Exception e) {
             throw new BeanCreationException("create bean for " + className + " failed", e);
         }
-
     }
+
 
     @Override
     public void setBeanClassLoader(ClassLoader classLoader) {

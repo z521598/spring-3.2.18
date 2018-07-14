@@ -4,8 +4,6 @@ import com.lsq.beans.factory.BeanCreationException;
 import com.lsq.beans.factory.BeanDefinitionStoreException;
 import com.lsq.beans.factory.support.DefaultBeanFactory;
 import com.lsq.beans.factory.xml.XmlBeanDefinitionReader;
-import com.lsq.context.ApplicationContext;
-import com.lsq.context.support.ClassPathXmlApplicationContext;
 import com.lsq.core.io.ClassPathResource;
 import com.lsq.service.PetStoreService;
 import org.junit.Assert;
@@ -27,7 +25,7 @@ public class BeanFactoryTest {
 
     @Test
     public void testGetBean() {
-        xmlBeanDefinitionReader.loadBeanDefinition(new ClassPathResource("beans.xml"));
+        xmlBeanDefinitionReader.loadBeanDefinitions(new ClassPathResource("beans.xml"));
         BeanDefinition db = beanFactory.getBeanDefinition("petStore");
         String className = db.getBeanClassName();
         Assert.assertEquals("com.lsq.service.PetStoreService", className);
@@ -37,19 +35,19 @@ public class BeanFactoryTest {
 
     @Test(expected = BeanCreationException.class)
     public void testGetInvalidBean() throws Exception {
-        xmlBeanDefinitionReader.loadBeanDefinition(new ClassPathResource("beans.xml"));
+        xmlBeanDefinitionReader.loadBeanDefinitions(new ClassPathResource("beans.xml"));
         beanFactory.getBean("invalid");
         beanFactory.getBean("null");
     }
 
     @Test(expected = BeanDefinitionStoreException.class)
     public void testGetInvalidXML() throws Exception {
-        xmlBeanDefinitionReader.loadBeanDefinition(new ClassPathResource("invalid.xml"));
+        xmlBeanDefinitionReader.loadBeanDefinitions(new ClassPathResource("invalid.xml"));
     }
 
     @Test
     public void testSingletonBean() throws Exception {
-        xmlBeanDefinitionReader.loadBeanDefinition(new ClassPathResource("beans.xml"));
+        xmlBeanDefinitionReader.loadBeanDefinitions(new ClassPathResource("beans.xml"));
 
         PetStoreService petStoreService = (PetStoreService) beanFactory.getBean("petStore");
         PetStoreService petStoreService2 = (PetStoreService) beanFactory.getBean("petStore");
@@ -58,7 +56,7 @@ public class BeanFactoryTest {
 
     @Test
     public void testPrototypeBean() throws Exception {
-        xmlBeanDefinitionReader.loadBeanDefinition(new ClassPathResource("beans.xml"));
+        xmlBeanDefinitionReader.loadBeanDefinitions(new ClassPathResource("beans.xml"));
 
         PetStoreService petStoreService = (PetStoreService) beanFactory.getBean("petStore2");
         PetStoreService petStoreService2 = (PetStoreService) beanFactory.getBean("petStore2");

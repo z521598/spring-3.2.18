@@ -10,5 +10,8 @@ public class BeanDefinitionStoreException extends BeansException {
 		super(msg, cause);
 		
 	}
-	
+
+	public BeanDefinitionStoreException(String msg) {
+		super(msg);
+	}
 }

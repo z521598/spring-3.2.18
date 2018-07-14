@@ -17,7 +17,7 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
         beanFactory = new DefaultBeanFactory();
         beanFactory.setBeanClassLoader(this.getBeanClassLoader());
         XmlBeanDefinitionReader xmlBeanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
-        xmlBeanDefinitionReader.loadBeanDefinition(getInputStreamByPath(xmlPath));
+        xmlBeanDefinitionReader.loadBeanDefinitions(getInputStreamByPath(xmlPath));
 
     }
 

@@ -1,5 +1,7 @@
 package com.lsq.beans;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2018/7/8.
  */
@@ -16,5 +18,7 @@ public interface BeanDefinition {
 
     void setScope(String scope);
 
-    public String getBeanClassName();
+    String getBeanClassName();
+
+    List<PropertyValue> getPropertyValues();
 }
