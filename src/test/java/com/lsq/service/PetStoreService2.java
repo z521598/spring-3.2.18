@@ -10,6 +10,7 @@ public class PetStoreService2 {
     private PetDao petDao;
     private ItemDao itemDao;
     private String owner;
+    private int number;
 
     public PetDao getPetDao() {
         return petDao;
@@ -33,5 +34,13 @@ public class PetStoreService2 {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }

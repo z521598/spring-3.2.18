@@ -24,6 +24,7 @@
         <property name="petDao" ref="petDao"/>
         <property name="itemDao" ref="itemDao"/>
         <property name="owner" value="lsq"/>
+        <property name="number" value="11"/>
     </bean>
     <bean id="petDao" class="com.lsq.service.dao.PetDao"/>
     <bean id="itemDao" class="com.lsq.service.dao.ItemDao"/>

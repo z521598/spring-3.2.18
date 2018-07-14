@@ -17,5 +17,6 @@ public class ApplicationContexTest2 {
         Assert.assertNotNull(petStoreService2.getItemDao());
         Assert.assertNotNull(petStoreService2.getPetDao());
         Assert.assertEquals("lsq", petStoreService2.getOwner());
+        Assert.assertEquals(11,petStoreService2.getNumber());
     }
 }

@@ -2,6 +2,8 @@ package com.lsq.beans.factory.support;
 
 import com.lsq.beans.BeanDefinition;
 import com.lsq.beans.PropertyValue;
+import com.lsq.beans.SimpleTypeConverter;
+import com.lsq.beans.TypeConverter;
 import com.lsq.beans.factory.BeanCreationException;
 import com.lsq.beans.factory.config.ConfigurableBeanFactory;
 import com.lsq.beans.factory.config.RuntimeReference;
@@ -23,6 +25,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 
     private ClassLoader classLoader;
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>();
+    private TypeConverter typeConverter = new SimpleTypeConverter();
 
     @Override
     public BeanDefinition getBeanDefinition(String id) {
@@ -78,7 +81,9 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 
                 for (PropertyDescriptor pd : pds) {
                     if (pd.getName().equals(propertyName)) {
-                        pd.getWriteMethod().invoke(bean, resolveValue);
+                        //  pd.getPropertyType() 可获取到参数的具体的类型信息
+                        Object convertValue = typeConverter.convertIfNecessary(resolveValue, pd.getPropertyType());
+                        pd.getWriteMethod().invoke(bean, convertValue);
                     }
                 }
 

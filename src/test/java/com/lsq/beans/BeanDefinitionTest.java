@@ -24,7 +24,7 @@ public class BeanDefinitionTest {
         reader.loadBeanDefinitions(new ClassPathResource("beans2.xml"));
         BeanDefinition beanDefinition = factory.getBeanDefinition("petStore2");
         List<PropertyValue> propertyValueList = beanDefinition.getPropertyValues();
-        Assert.assertEquals(3, propertyValueList.size());
+        Assert.assertEquals(4, propertyValueList.size());
         Assert.assertTrue(getObject(propertyValueList, "petDao").getValue() instanceof RuntimeReference);
         Assert.assertTrue(getObject(propertyValueList, "itemDao").getValue() instanceof RuntimeReference);
         Assert.assertTrue(getObject(propertyValueList, "owner").getValue() instanceof TypedStringValue);
