@@ -8,6 +8,7 @@ import com.lsq.beans.factory.BeanCreationException;
 import com.lsq.beans.factory.config.ConfigurableBeanFactory;
 import com.lsq.beans.factory.config.RuntimeReference;
 import com.lsq.util.ClassUtils;
+import org.apache.commons.beanutils.BeanUtils;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -78,12 +79,14 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
                 String propertyName = propertyValue.getName();
                 Object originalValue = propertyValue.getValue();
                 Object resolveValue = valueResolver.resolveValueIfNecessary(originalValue);
-
+                // 下述代码可以用BeanUtils代替
+                //  BeanUtils.setProperty(bean, propertyName, resolveValue);
                 for (PropertyDescriptor pd : pds) {
                     if (pd.getName().equals(propertyName)) {
                         //  pd.getPropertyType() 可获取到参数的具体的类型信息
                         Object convertValue = typeConverter.convertIfNecessary(resolveValue, pd.getPropertyType());
                         pd.getWriteMethod().invoke(bean, convertValue);
+
                     }
                 }
 
