@@ -2,6 +2,7 @@ package com.lsq.beans.factory.support;
 
 import com.lsq.beans.BeanDefinition;
 import com.lsq.beans.PropertyValue;
+import com.lsq.beans.factory.config.ConstructorArgument;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +11,13 @@ import java.util.List;
  * Created by Administrator on 2018/7/8.
  */
 public class GenericBeanDefinition implements BeanDefinition {
-    String id;
-    String className;
+    private String id;
+    private String className;
     private boolean singleton = true;
     private boolean prototype = false;
     private String scope = SCOPE_DEFAULT;
     private List<PropertyValue> propertyValues = new ArrayList<PropertyValue>();
+    private ConstructorArgument constructorArgument = new ConstructorArgument();
 
     public GenericBeanDefinition(String id, String className) {
         this.id = id;
@@ -24,6 +26,11 @@ public class GenericBeanDefinition implements BeanDefinition {
 
     public String getClassName() {
         return className;
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     public boolean isSingleton() {
@@ -54,4 +61,10 @@ public class GenericBeanDefinition implements BeanDefinition {
     public List<PropertyValue> getPropertyValues() {
         return propertyValues;
     }
+
+    @Override
+    public ConstructorArgument getConstructorArgument() {
+        return constructorArgument;
+    }
+
 }

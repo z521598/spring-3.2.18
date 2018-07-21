@@ -1,12 +1,11 @@
 package com.lsq.beans;
 
+import com.lsq.beans.factory.config.ConstructorArgument;
 import com.lsq.beans.factory.config.RuntimeReference;
 import com.lsq.beans.factory.config.TypedStringValue;
 import com.lsq.beans.factory.support.DefaultBeanFactory;
 import com.lsq.beans.factory.xml.XmlBeanDefinitionReader;
 import com.lsq.core.io.ClassPathResource;
-import com.lsq.service.dao.ItemDao;
-import com.lsq.service.dao.PetDao;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -39,4 +38,17 @@ public class BeanDefinitionTest {
         return null;
     }
 
+    @Test
+    public void testGetConstructorValues() throws Exception {
+        DefaultBeanFactory defaultBeanFactory = new DefaultBeanFactory();
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(defaultBeanFactory);
+        reader.loadBeanDefinitions(new ClassPathResource("beans3.xml"));
+        BeanDefinition bd = defaultBeanFactory.getBeanDefinition("petStore3");
+        ConstructorArgument constructorValues = bd.getConstructorArgument();
+        List<ConstructorArgument.ValueHolder> valueHolders = constructorValues.getArgumentValues();
+        Assert.assertEquals(3, valueHolders.size());
+        Assert.assertEquals("petDao", ((RuntimeReference) valueHolders.get(0).getValue()).getBeanName());
+        Assert.assertEquals("3", ((TypedStringValue) valueHolders.get(2).getValue()).getValue());
+
+    }
 }

@@ -6,9 +6,7 @@ import com.lsq.beans.SimpleTypeConverter;
 import com.lsq.beans.TypeConverter;
 import com.lsq.beans.factory.BeanCreationException;
 import com.lsq.beans.factory.config.ConfigurableBeanFactory;
-import com.lsq.beans.factory.config.RuntimeReference;
 import com.lsq.util.ClassUtils;
-import org.apache.commons.beanutils.BeanUtils;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -98,12 +96,17 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
     }
 
     private Object instanceBean(BeanDefinition beanDefinition) {
-        String className = beanDefinition.getBeanClassName();
-        try {
-            Class cla = getBeanClassLoader().loadClass(className);
-            return cla.newInstance();
-        } catch (Exception e) {
-            throw new BeanCreationException("create bean for " + className + " failed", e);
+        if (beanDefinition.getConstructorArgument().hasArgs()) {
+            ConstructorResolver resolver = new ConstructorResolver(this);
+            return resolver.autowireConstructor(beanDefinition);
+        } else {
+            String className = beanDefinition.getBeanClassName();
+            try {
+                Class cla = getBeanClassLoader().loadClass(className);
+                return cla.newInstance();
+            } catch (Exception e) {
+                throw new BeanCreationException("create bean for " + className + " failed", e);
+            }
         }
     }
 

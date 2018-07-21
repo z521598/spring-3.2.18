@@ -1,5 +1,7 @@
 package com.lsq.beans;
 
+import com.lsq.beans.factory.config.ConstructorArgument;
+
 import java.util.List;
 
 /**
@@ -10,6 +12,7 @@ public interface BeanDefinition {
     String SCOPE_PROTOTYPE = "prototype";
     String SCOPE_DEFAULT = "";
 
+    String getId();
     boolean isSingleton();
 
     boolean isPrototype();
@@ -21,4 +24,7 @@ public interface BeanDefinition {
     String getBeanClassName();
 
     List<PropertyValue> getPropertyValues();
+
+    ConstructorArgument getConstructorArgument();
+
 }
